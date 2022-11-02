@@ -3,7 +3,7 @@
 // Date: 11/2/22
 
 `timescale 1ns/10ps
-module ALU(op, in0, in1, out);
+module ALU(in0, in1, op, out);
     input[2:0] op;
     input[15:0] in0, in1;
     output reg[15:0] out;
