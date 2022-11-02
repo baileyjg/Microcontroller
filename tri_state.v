@@ -12,6 +12,6 @@ module tri_state(en, data, q);
         if(en)
             q <= data;
         else
-            q <= 16'bzzzz; 
+            q <= 16'bzzzzzzzzzzzzzzzz; 
     end
 endmodule
