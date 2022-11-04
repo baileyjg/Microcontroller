@@ -1,24 +1,48 @@
-`include "ALU.v"
+`include "top_level.v"
 `timescale 1ns/10ps
 
 module top_level_tb;
-    reg[2:0] op;
-    reg[15:0] in0, in1;
-    wire[15:0] out;
+    reg clk, rst, ALUin0, ALUin1, ALUOutLatch, ALUOutEn;
+    reg[2:0] opControl;
+    wire[15:0] bus;
 
-    ALU alu(op, in0, in1, out);
+    // Port mapping of the top_level
+    top_level top(clk, rst, bus, opControl, ALUin0, ALUin1, ALUOutLatch, ALUOutEn);
 
     initial begin
-        $dumpfile("ALU.vcd");
+        $dumpfile("top_level.vcd");
         $dumpvars(0, top_level_tb);
 
-        op = 3'b000;
-        in0 = 16'b0000000000000000;
-        in1 = 16'b0000000000000000;
-        #10;
-        op = 3'b110;
-        in0 = 16'b0010010101000011;
-        in1 = 16'b1100011000001010;
-        #50;
+        // Set initial values
+        clk = 0;
+        rst = 0;
+        opControl = 3'b000;
+        ALUin0 = 0;
+        ALUin1 = 0;
+        ALUOutLatch = 0;
+        ALUOutEn = 0;
+
+        // Begin stimulating values
+        #1
+        rst = 1;
+        #10
+        opControl = 3'b000;
+        ALUin0 = 1;
+        #1
+        ALUin0 = 0;
+        #1
+        ALUin1 = 1;
+        #1
+        ALUin1 = 0;
+        #5
+        ALUOutLatch = 1;
+        #1
+        ALUOutLatch = 0;
+        #1
+        ALUOutEn = 1;
+        #1
+        ALUOutEn = 0;
     end
+
+    always #10 clk =~ clk;
 endmodule
