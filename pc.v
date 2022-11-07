@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module pc(clk, rst, out);
+module PC(clk, rst, out);
 input clk, rst;
 output reg[15:0] out;
 
