@@ -9,7 +9,9 @@
 `include "mem.v"
 `timescale 1ns/10ps
 
-module top_level(clk, rst, busIn, busOut, opControl, ALUin0, ALUin1, ALUOutLatch, ALUOutEn, PCOutEn);
+module top_level(clk, rst, busIn, busOut, opControl, ALUin0, ALUin1, ALUOutLatch, ALUOutEn, PCOutEn, r0Latch, r1Latch, r2Latch,
+                 r3Latch, r0Out, r1Out, r2Out, r3Out, memEN, memRW, MARin, MDRwriteEN, MDRreadEN, MDRout, MFC, p0Latch, p0Out,
+                 p1Latch, p1Out, p0Data, p1Data);
 input clk, rst;
 
 input ALUin0, ALUin1, ALUOutLatch, ALUOutEn; // ALU control signals
@@ -29,7 +31,8 @@ wire[15:0] temp0, temp1, temp2, temp3; // ALU port mapping pin conversions
 wire[15:0] temp4; // PC pin conversions
 wire[15:0] temp5, temp6, temp7, temp8; // General purpose reg pin conversions
 wire[15:0] temp9, temp10, temp11, temp12; // Memory pin conversions
-wire[15:0] p0Data, p1Data, p1temp; // I/O pin conversions
+input[15:0] p0Data, p1Data; // I/O pin converstions (accessible by tb)
+wire[15:0] p1temp; // I/O pin conversions
 
 // Port mappings //
 
