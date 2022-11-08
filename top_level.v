@@ -6,19 +6,28 @@
 `include "dff.v"
 `include "tri_state.v"
 `include "PC.v"
+`include "mem.v"
 `timescale 1ns/10ps
 
 module top_level(clk, rst, busIn, busOut, opControl, ALUin0, ALUin1, ALUOutLatch, ALUOutEn, PCOutEn);
 input clk, rst;
+
 input ALUin0, ALUin1, ALUOutLatch, ALUOutEn; // ALU control signals
 input[2:0] opControl; // ALU opcontrol
 input PCOutEn; // PC control signals
 input r0Latch, r1Latch, r2Latch, r3Latch, r0Out, r1Out, r2Out, r3Out; // General purpose register control signals
+input memEN, memRW; // Memory control signals
+input MARin; // MAR control signals
+input MDRwriteEN, MDRreadEN, MDRout; // MDR control signals
+output MFC; // Mem function complete
+
 input[15:0] busIn;
 output wire[15:0] busOut;
+
 wire[15:0] temp0, temp1, temp2, temp3; // ALU port mapping pin conversions
 wire[15:0] temp4; // PC pin conversions
-wire[15:0] temp5, temp6, temp7, temp8;
+wire[15:0] temp5, temp6, temp7, temp8; // General purpose reg pin conversions
+wire[15:0] temp9, temp10, temp11, temp12; // Memory pin conversions
 
 // Port mappings //
 
@@ -46,6 +55,12 @@ tri_state buffer5(r2Out, temp7, busOut);
 dff r3(clk, rst, r3Latch, busIn, temp8);
 tri_state buffer6(r3Out, temp8, busOut);
 
-// MAR
+// Memory
+mem MEM(MFC, memEN, temp9, temp10, memRW, temp11);
 
+dff MAR(clk, rst, MARin, busIn, temp9);
+
+dff MDRwrite(clk, rst, MDRwriteEN, busIn, temp10);
+dff MDRread(clk, rst, MDRreadEN, temp11, temp12);
+tri_state MDRtri(MDRout, temp12, busOut);
 endmodule

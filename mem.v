@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module mem(MFC, en, addr, in, rw);
+module mem(MFC, en, addr, in, rw, out);
     input en, rw;
     input[15:0] addr, in;
     output reg[15:0] out;
