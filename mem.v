@@ -32,6 +32,7 @@ module mem(MFC, en, addr, in, rw, out);
             endcase
         else
             memorycell = in;
+        #5 MFC = 1;
     end
 
     always @(negedge en) begin

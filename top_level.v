@@ -9,14 +9,12 @@
 `include "mem.v"
 `timescale 1ns/10ps
 
-module top_level(clk, rst, busIn, busOut, opControl, ALUin0, ALUin1, ALUOutLatch, ALUOutEn, PCOutEn, r0Latch, r1Latch, r2Latch,
-                 r3Latch, r0Out, r1Out, r2Out, r3Out, memEN, memRW, MARin, MDRwriteEN, MDRreadEN, MDRout, MFC, p0Latch, p0Out,
-                 p1Latch, p1Out, p0Data, p1Data);
+module top_level(clk, rst, busIn, busOut, opControl, ALUin0, ALUin1, ALUOutLatch, ALUOutEn);
 input clk, rst;
 
 input ALUin0, ALUin1, ALUOutLatch, ALUOutEn; // ALU control signals
 input[2:0] opControl; // ALU opcontrol
-input PCOutEn; // PC control signals
+input PCOutEn, PCInc; // PC control signals
 input r0Latch, r1Latch, r2Latch, r3Latch, r0Out, r1Out, r2Out, r3Out; // General purpose register control signals
 input memEN, memRW; // Memory control signals
 input MARin; // MAR control signals
@@ -44,7 +42,7 @@ dff flip2(clk, rst, ALUOutLatch, temp2, temp3); // ALU output reg
 tri_state buffer(ALUOutEn, temp3, busOut); // ALU output tri-state
 
 // Program counter
-PC pc(clk, rst, temp4);
+PC pc(PCInc, rst, temp4);
 tri_state buffer2(PCOutEn, temp4, busOut);
 
 // General purpose registers //
