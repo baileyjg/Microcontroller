@@ -1,13 +1,12 @@
 `timescale 1ns/10ps
 
-module ALUFSM(clk, rst, activate, done, rx1out, rx2out, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxin, pcInc, instruction);
+module ALUiFSM(clk, rst, activate, done, rx1out, rx2out, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxin, pcInc, opControl, opcode, param1, param2);
 input clk; // Clock
 input rst, activate; // Kick start signals
-input[15:0] instruction;
-wire[3:0] opcode = instruction[15:12];
-wire[5:0] param1 = instruction[11:6];
-wire[5:0] param2 = instruction[5:0];
+input[3:0] opcode;
+input[5:0] param1, param2;
 output reg done, rx1out, rx2out, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxin, pcInc; // Output signals
+output reg[2:0] opControl;
 
 // States
 reg[3:0] pres_state, next_state;
@@ -16,10 +15,8 @@ parameter st8 = 4'b1000, st9 = 4'b1001, st10 = 4'b1010, st11 = 4'b1011;
 
 // State register
 always @(posedge clk or posedge rst or posedge activate) begin
-    if(rst)
+    if(rst || activate)
         pres_state <= st0;
-    else if(opcode == 4'b1000 || opcode == 4'b1001 || opcode == 4'b1010 || opcode == 4'b1011 || opcode == 4'b1100 || opcode == 4'b1101 || opcode == 4'b1110)
-        pres_state <= next_state;
     else
         pres_state <= next_state;
 end
@@ -63,19 +60,22 @@ always @(pres_state) begin
         st5: begin
             done <= 0;rx1out <= 0;rx2out <= 1;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxin <= 0;pcInc <= 0;
         end
-        st6: begin
-            done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 1;ALUoutEN <= 0;rxin <= 0;pcInc <= 0;
+        st6: begin // ALU does operation
+            opControl <= opcode[3:1];
         end
         st7: begin
-            done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxin <= 0;pcInc <= 0;
+            done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 1;ALUoutEN <= 0;rxin <= 0;pcInc <= 0;
         end
         st8: begin
-            done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxin <= 1;pcInc <= 0;
+            done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxin <= 0;pcInc <= 0;
         end
         st9: begin
-            done <= 1;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxin <= 0;pcInc <= 0;
+            done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxin <= 1;pcInc <= 0;
         end
         st10: begin
+            done <= 1;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxin <= 0;pcInc <= 0;
+        end
+        st11: begin
             done <= 0;rx1out <= 0;rx2out <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxin <= 0;pcInc <= 0;
         end
     endcase
