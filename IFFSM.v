@@ -15,8 +15,10 @@ always @(posedge clk or posedge rst or posedge done) begin
     if(rst || done) // Kick off the FSM with either reset or done signals
         next_state <= st0;
     else if(pres_state == st3 && MFC) // St3 can only move on if MFC is asserted
-        pres_state <= next_state;
-    else if(!MFC) // Transition to next_state each clk edge
+        pres_state <= st4;
+    else if(pres_state == st3 && !MFC) // Stay in st3 if no MFC
+        pres_state <= st3;
+    else // Transition to next_state each clk edge
         pres_state <= next_state;
 end
 
