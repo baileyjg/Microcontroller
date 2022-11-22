@@ -1,3 +1,7 @@
+// ALU Finite State Machine
+// Author: Bailey Grimes
+// Date: 11/20/22
+
 `timescale 1ns/10ps
 
 module ALUFSM(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc);

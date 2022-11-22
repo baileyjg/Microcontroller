@@ -21,7 +21,8 @@ input MARin; // MAR control signals
 input MDRwriteEN, MDRreadEN, MDRout; // MDR control signals
 output MFC; // Mem function complete
 input p0Latch, p0Out, p1Latch, p1Out; // I/O control signals
-input IREN;
+input IREN; // Instruction register EN
+input ALUImmOut; // ALUi Immediate num out EN
 
 input[15:0] busIn;
 output wire[15:0] busOut;
@@ -33,6 +34,7 @@ wire[15:0] temp9, temp10, temp11, temp12; // Memory pin conversions
 input[15:0] p0Data, p1Data; // I/O pin converstions (accessible by tb)
 wire[15:0] p1temp; // I/O pin conversions
 wire[15:0] IRinstruct;
+wire[15:0] ALUImmOutTemp; // I/O pin conversions for ALUi Immediate num out tri-state
 
 // Port mappings //
 
@@ -83,5 +85,8 @@ tri_state p1tri(p1Out, p1temp, busOut);
 
 // Instruction Register
 dff IR(clk, rst, IREN, busIn, IRinstruct);
+
+// ALUi Immediate Num Out Tri-state
+tri_state immOut(ALUImmOut, ALUImmOutTemp, busOut);
 
 endmodule
