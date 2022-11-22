@@ -75,7 +75,7 @@ always @(pres_state) begin
         end
         st3: begin
             done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
-            param2Out <= {16{param2}}; // Pass the immediate num to the tri-state
+            param2Out <= param2; // Pass the immediate num to the tri-state
         end
         st4: begin
             done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
