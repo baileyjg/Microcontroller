@@ -17,7 +17,7 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
     //States
     reg[3:0] pres_state, next_state;
     parameter st0 = 4'b0000, st1 = 4'b0001, st2 = 4'b0010, st3 = 4'b0011, st4 = 4'b0100, st5 = 4'b0101, st6 = 4'b0110;
-    parameter st7 = 4'b0111, st8 = 4'b1000, st9 = 4'b1001, st10 = 4'b1010, st11 = 4'b1011, st12 = 4'b1100;
+    parameter st7 = 4'b0111, st8 = 4'b1000, st9 = 4'b1001, st10 = 4'b1010, st11 = 4'b1011;
 
     // State register
     always @(posedge clk or posedge rst) begin

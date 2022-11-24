@@ -23,6 +23,7 @@ output MFC; // Mem function complete
 input p0Latch, p0Out, p1Latch, p1Out; // I/O control signals
 input IREN; // Instruction register EN
 input ALUImmOut; // ALUi Immediate num out EN
+input MOVImmOut; // MOVi Immediate num out EN
 
 input[15:0] busIn;
 output wire[15:0] busOut;
@@ -35,6 +36,7 @@ input[15:0] p0Data, p1Data; // I/O pin converstions (accessible by tb)
 wire[15:0] p1temp; // I/O pin conversions
 wire[15:0] IRinstruct;
 wire[15:0] ALUImmOutTemp; // I/O pin conversions for ALUi Immediate num out tri-state
+wire[15:0] MOVImmOutTemp; // I/O pin conversions for MOVi immediate num out tri-state
 
 // Port mappings //
 
@@ -88,5 +90,8 @@ dff IR(clk, rst, IREN, busIn, IRinstruct);
 
 // ALUi Immediate Num Out Tri-state
 tri_state immOut(ALUImmOut, ALUImmOutTemp, busOut);
+
+// MOVi Immediate Num Out Tri-state
+tri_state immOut2(MOVImmOut, MOVImmOutTemp, busOut);
 
 endmodule

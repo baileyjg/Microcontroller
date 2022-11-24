@@ -1,3 +1,5 @@
+// Instruction Fetch Finite State Machine
+
 `timescale 1ns/10ps
 
 module IFFSM(clk, rst, done, MFC, PCoutEN, MARin, memEN, RW, MDRreadEN, MDRout, IRin);
@@ -11,7 +13,7 @@ reg[2:0] pres_state, next_state;
 parameter st0 = 3'b000, st1 = 3'b001, st2 = 3'b010, st3 = 3'b011, st4 = 3'b100, st5 = 3'b101, st6 = 3'b110, st7 = 3'b111;
 
 // State Register
-always @(posedge clk or posedge rst or posedge done) begin
+always @(posedge clk or posedge rst or posedge done or posedge MFC) begin
     if(rst || done) // Kick off the FSM with either reset or done signals
         next_state <= st0;
     else if(pres_state == st3 && MFC) // St3 can only move on if MFC is asserted
