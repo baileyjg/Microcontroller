@@ -23,8 +23,8 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
     always @(posedge clk or posedge rst) begin
         if(rst)
             pres_state <= st0;
-        else if(pres_state == st2 && opCode == 4'b0010) // Branch to st7 for load operation
-            pres_state <= st7;
+        else if(pres_state == st2 && opCode == 4'b0010) // Branch to st6 for load operation
+            pres_state <= st6;
         else if(pres_state == st2 && opCode == 4'b0011) // Branch to st3 for store operation
             pres_state <= st3;
         else if(pres_state == st6 && MFC) // Load can move into st7
@@ -119,7 +119,7 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
                 done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 1;RW <= 1;rxOut <= 4'b0000;rxIn <= 4'b0000;pcInc <= 0;
             end
             st9: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 1;rxOut <= 4'b0000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 1;RW <= 1;rxOut <= 4'b0000;pcInc <= 0;
                 case(param1) // Figure out which gen reg to load the data into
                     6'b000000: rxIn <= 4'b1000;
                     6'b000001: rxIn <= 4'b0100;
