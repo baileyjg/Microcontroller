@@ -4,14 +4,14 @@
 
 `timescale 1ns/10ps
 
-module ALUiFSM(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc, param2Out);
+module ALUiFSM(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc, param2Out, ALUImmOut);
 input clk, rst;
 input[15:0] instruction; // 16-bit data
 wire[3:0] opcode = instruction[15:12];
 wire[5:0] param1 = instruction[11:6];
 wire[5:0] param2 = instruction[5:0];
 output reg[15:0] param2Out; // Output signal for an immediate number. Fed to a tri-state
-output reg done, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, pcInc; // Output signals
+output reg done, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, pcInc, ALUImmOut; // Output signals
 output reg[3:0] rxOut, rxIn; // Gen reg output signals
 
 // States
