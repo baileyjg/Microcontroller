@@ -12,7 +12,7 @@ module MOViFSM(clk, rst, instruction, done, rxIn, pcInc, param2Out, triEN);
     wire[5:0] param2 = instruction[5:0];
 
     output reg done, pcInc, triEN;
-    output reg[3:0] rxIn;
+    output reg[4:0] rxIn;
     output reg[15:0] param2Out;
 
     reg[2:0] pres_state, next_state;
@@ -44,27 +44,28 @@ module MOViFSM(clk, rst, instruction, done, rxIn, pcInc, param2Out, triEN);
     always @(pres_state) begin
         case(pres_state)
             st0: begin
-                done <= 0;rxIn <= 4'b0000;pcInc <= 0;triEN <= 0;
+                done <= 0;rxIn <= 5'b00000;pcInc <= 0;triEN <= 0;
             end
             st1: begin
-                done <= 0;rxIn <= 4'b0000;pcInc <= 1;triEN <= 1;
+                done <= 0;rxIn <= 5'b00000;pcInc <= 1;triEN <= 1;
                 param2Out <= param2; // Put the immediate number on the bus
             end
             st2: begin
                 done <= 0;pcInc <= 0;triEN <= 1;
                 case(param1) // Store the immediate num into the gen reg in param1
-                    6'b000000: rxIn <= 4'b1000;
-                    6'b000001: rxIn <= 4'b0100;
-                    6'b000010: rxIn <= 4'b0010;
-                    6'b000011: rxIn <= 4'b0001;
-                    default: rxIn <= 4'b0000;
+                    6'b000000: rxIn <= 5'b10000;
+                    6'b000001: rxIn <= 5'b01000;
+                    6'b000010: rxIn <= 5'b00100;
+                    6'b000011: rxIn <= 5'b00010;
+                    6'b000100: rxIn <= 5'b00001;
+                    default: rxIn <= 5'b00000;
                 endcase
             end
             st3: begin
-                done <= 1;rxIn <= 4'b0000;pcInc <= 0;triEN <= 0;
+                done <= 1;rxIn <= 5'b00000;pcInc <= 0;triEN <= 0;
             end
             st4: begin
-                done <= 0;rxIn <= 4'b0000;pcInc <= 0;triEN <= 0;
+                done <= 0;rxIn <= 5'b00000;pcInc <= 0;triEN <= 0;
             end
         endcase
     end

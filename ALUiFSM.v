@@ -12,7 +12,7 @@ wire[5:0] param1 = instruction[11:6];
 wire[5:0] param2 = instruction[5:0];
 output reg[15:0] param2Out; // Output signal for an immediate number. Fed to a tri-state
 output reg done, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, pcInc, ALUImmOut; // Output signals
-output reg[3:0] rxOut, rxIn; // Gen reg output signals
+output reg[4:0] rxOut, rxIn; // Gen reg output signals
 
 // States
 reg[3:0] pres_state, next_state;
@@ -51,56 +51,59 @@ end
 always @(pres_state) begin
     case(pres_state)
         st0: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
         end
         st1: begin
-            done <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 1;
+            done <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 1;
             case(param1) // Figure out which gen reg EN to assert
-                6'b000000: rxOut <= 4'b1000;
-                6'b000001: rxOut <= 4'b0100;
-                6'b000010: rxOut <= 4'b0010;
-                6'b000011: rxOut <= 4'b0001;
-                default: rxOut <= 4'b0000;
+                6'b000000: rxOut <= 5'b10000;
+                6'b000001: rxOut <= 5'b01000;
+                6'b000010: rxOut <= 5'b00100;
+                6'b000011: rxOut <= 5'b00010;
+                6'b000100: rxOut <= 5'b00001;
+                default: rxOut <= 5'b00000;
             endcase
         end
         st2: begin
-            done <= 0;ALUin0 <= 1;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;ALUin0 <= 1;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
             case(param1) // Figure out which gen reg EN to assert
-                6'b000000: rxOut <= 4'b1000;
-                6'b000001: rxOut <= 4'b0100;
-                6'b000010: rxOut <= 4'b0010;
-                6'b000011: rxOut <= 4'b0001;
-                default: rxOut <= 4'b0000;
+                6'b000000: rxOut <= 5'b10000;
+                6'b000001: rxOut <= 5'b01000;
+                6'b000010: rxOut <= 5'b00100;
+                6'b000011: rxOut <= 5'b00010;
+                6'b000100: rxOut <= 5'b00001;
+                default: rxOut <= 5'b00000;
             endcase
         end
         st3: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
             param2Out <= param2; // Pass the immediate num to the tri-state
         end
         st4: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
         end
         st5: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 1;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 1;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
         end
         st6: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxIn <= 5'b00000;pcInc <= 0;
         end
         st8: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;pcInc <= 0;
             case(param1) // Figure out which gen reg EN to assert
-                6'b000000: rxIn <= 4'b1000;
-                6'b000001: rxIn <= 4'b0100;
-                6'b000010: rxIn <= 4'b0010;
-                6'b000011: rxIn <= 4'b0001;
-                default: rxIn <= 4'b0000;
+                6'b000000: rxIn <= 5'b10000;
+                6'b000001: rxIn <= 5'b01000;
+                6'b000010: rxIn <= 5'b00100;
+                6'b000011: rxIn <= 5'b00010;
+                6'b000100: rxIn <= 5'b00001;
+                default: rxIn <= 5'b00000;
             endcase
         end
         st9: begin
-            done <= 1;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 1;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
         end
         st10: begin
-            done <= 0;rxOut <= 4'b0000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 4'b0000;pcInc <= 0;
+            done <= 0;rxOut <= 5'b00000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 5'b00000;pcInc <= 0;
         end
     endcase
 end
