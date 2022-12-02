@@ -17,7 +17,7 @@ module MEMFSM_tb;
         // Set initial values
         clk = 0;
         rst = 0;
-        instruction = 16'b0010000001000010; // ALU; Add R1 R2
+        instruction = 16'b0010000001000010; // LOAD R1 R2
 
         // Begin stimulation of values
         rst = 1;

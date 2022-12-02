@@ -6,7 +6,7 @@ module ALUiFSM_tb;
     reg[15:0] instruction;
 
     wire done, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, pcInc, ALUImmOut;
-    wire[3:0] rxOut, rxIn;
+    wire[4:0] rxOut, rxIn;
     wire[15:0] param2Out;
 
     ALUiFSM fsm(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc, param2Out, ALUImmOut);

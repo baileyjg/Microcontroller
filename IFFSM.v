@@ -13,13 +13,11 @@ reg[2:0] pres_state, next_state;
 parameter st0 = 3'b000, st1 = 3'b001, st2 = 3'b010, st3 = 3'b011, st4 = 3'b100, st5 = 3'b101, st6 = 3'b110, st7 = 3'b111;
 
 // State Register
-always @(posedge clk or posedge rst or posedge done or posedge MFC) begin
-    if(rst || done) // Kick off the FSM with either reset or done signals
-        next_state <= st0;
-    else if(pres_state == st3 && MFC) // St3 can only move on if MFC is asserted
-        pres_state <= st4;
-    else if(pres_state == st3 && !MFC) // Stay in st3 if no MFC
-        pres_state <= st3;
+always @(posedge clk or posedge rst or posedge done) begin
+    if(rst) // Kick off the FSM with either reset or done signals
+        pres_state <= st0;
+    else if(done)
+        pres_state <= st0;
     else // Transition to next_state each clk edge
         pres_state <= next_state;
 end
@@ -30,12 +28,17 @@ always @(pres_state) begin
         st0: next_state <= st1;
         st1: next_state <= st2;
         st2: next_state <= st3;
-        st3: next_state <= st4;
+        st3: begin
+            case(MFC)
+                1'b1: next_state <= st4;
+                1'b0: next_state <= st3;
+            endcase
+        end
         st4: next_state <= st5;
         st5: next_state <= st6;
         st6: next_state <= st7;
         st7: next_state <= st7;
-        default: next_state = st0;
+        default: next_state <= st0;
     endcase
 end
 

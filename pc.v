@@ -8,7 +8,7 @@ module PC(inc, rst, out);
 input rst, inc;
 output reg[15:0] out;
 
-always @(inc) begin
+always @(inc or rst) begin
     if(rst)
         out <= 16'b0000000000000000;
     else if(inc)

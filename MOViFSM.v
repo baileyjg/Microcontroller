@@ -45,10 +45,11 @@ module MOViFSM(clk, rst, instruction, done, rxIn, pcInc, param2Out, triEN);
         case(pres_state)
             st0: begin
                 done <= 0;rxIn <= 5'b00000;pcInc <= 0;triEN <= 0;
+                param2Out <= 16'b0000000000000000;
             end
             st1: begin
                 done <= 0;rxIn <= 5'b00000;pcInc <= 1;triEN <= 1;
-                param2Out <= param2; // Put the immediate number on the bus
+                param2Out <= {10'b0000000000, param2}; // Put the immediate number on the bus
             end
             st2: begin
                 done <= 0;pcInc <= 0;triEN <= 1;

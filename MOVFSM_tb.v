@@ -6,7 +6,7 @@ module MOVFSM_tb;
     reg[15:0] instruction;
 
     wire done, pcInc;
-    wire[3:0] rxOut, rxIn;
+    wire[4:0] rxOut, rxIn;
 
     MOVFSM fsm(clk, rst, instruction, done, rxOut, rxIn, pcInc);
 

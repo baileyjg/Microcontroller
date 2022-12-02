@@ -6,7 +6,7 @@ module ALUFSM_tb;
     reg[15:0] instruction;
 
     wire done, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, pcInc;
-    wire[3:0] rxOut, rxIn;
+    wire[4:0] rxOut, rxIn;
 
     ALUFSM fsm(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc);
 
