@@ -12,7 +12,7 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
     wire[5:0] param2 = instruction[5:0];
 
     output reg done, memEN, marIn, mdrWriteEN, mdrReadEN, mdrOut, RW, pcInc;
-    output reg[4:0] rxOut, rxIn;
+    output reg[5:0] rxOut, rxIn;
 
     //States
     reg[3:0] pres_state, next_state;
@@ -64,80 +64,85 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
     always @(pres_state) begin
         case(pres_state)
             st0: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st1: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 5'b00000;pcInc <= 1;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 6'b000000;pcInc <= 1;
                 case(param2) // Figure out which gen reg to pull the destination address from
-                    6'b000000: rxOut <= 5'b10000;
-                    6'b000001: rxOut <= 5'b01000;
-                    6'b000010: rxOut <= 5'b00100;
-                    6'b000011: rxOut <= 5'b00010;
-                    6'b000100: rxOut <= 5'b00001;
-                    default: rxOut <= 5'b00000;
+                    6'b000000: rxOut <= 6'b100000;
+                    6'b000001: rxOut <= 6'b010000;
+                    6'b000010: rxOut <= 6'b001000;
+                    6'b000011: rxOut <= 6'b000100;
+                    6'b000100: rxOut <= 6'b000010;
+                    6'b000101: rxOut <= 6'b000001;
+                    default: rxOut <= 6'b000000;
                 endcase
             end
             st2: begin
-                done <= 0;memEN <= 0;marIn <= 1;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 1;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 6'b000000;pcInc <= 0;
                 case(param2) // Figure out which gen reg to pull the destination address from
-                    6'b000000: rxOut <= 5'b10000;
-                    6'b000001: rxOut <= 5'b01000;
-                    6'b000010: rxOut <= 5'b00100;
-                    6'b000011: rxOut <= 5'b00010;
-                    6'b000100: rxOut <= 5'b00001;
-                    default: rxOut <= 5'b00000;
+                    6'b000000: rxOut <= 6'b100000;
+                    6'b000001: rxOut <= 6'b010000;
+                    6'b000010: rxOut <= 6'b001000;
+                    6'b000011: rxOut <= 6'b000100;
+                    6'b000100: rxOut <= 6'b000010;
+                    6'b000101: rxOut <= 6'b000001;
+                    default: rxOut <= 6'b000000;
                 endcase
             end
             st3: begin // Begin Store operation
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 6'b000000;pcInc <= 0;
                 case(param1) // Figure out which gen reg to pull the data from
-                    6'b000000: rxOut <= 5'b10000;
-                    6'b000001: rxOut <= 5'b01000;
-                    6'b000010: rxOut <= 5'b00100;
-                    6'b000011: rxOut <= 5'b00010;
-                    6'b000100: rxOut <= 5'b00001;
-                    default: rxOut <= 5'b00000;
+                    6'b000000: rxOut <= 6'b100000;
+                    6'b000001: rxOut <= 6'b010000;
+                    6'b000010: rxOut <= 6'b001000;
+                    6'b000011: rxOut <= 6'b000100;
+                    6'b000100: rxOut <= 6'b000010;
+                    6'b000101: rxOut <= 6'b000001;
+                    default: rxOut <= 6'b000000;
                 endcase
             end
             st4: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 1;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 1;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxIn <= 6'b000000;pcInc <= 0;
                 case(param1) // Figure out which gen reg to pull the data from
-                    6'b000000: rxOut <= 5'b10000;
-                    6'b000001: rxOut <= 5'b01000;
-                    6'b000010: rxOut <= 5'b00100;
-                    6'b000011: rxOut <= 5'b00010;
-                    6'b000100: rxOut <= 5'b00001;
-                    default: rxOut <= 5'b00000;
+                    6'b000000: rxOut <= 6'b100000;
+                    6'b000001: rxOut <= 6'b010000;
+                    6'b000010: rxOut <= 6'b001000;
+                    6'b000011: rxOut <= 6'b000100;
+                    6'b000100: rxOut <= 6'b000010;
+                    6'b000101: rxOut <= 6'b000001;
+                    default: rxOut <= 6'b000000;
                 endcase
             end
-            st5: begin
-                done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+            st6: begin
+                done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st6: begin // Begin load operation
-                done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 1;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 1;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st7: begin
-                done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 1;mdrOut <= 0;RW <= 1;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 1;mdrOut <= 0;RW <= 1;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st8: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 1;RW <= 1;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 1;RW <= 1;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st9: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 1;RW <= 1;rxOut <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 1;RW <= 1;rxOut <= 6'b000000;pcInc <= 0;
                 case(param1) // Figure out which gen reg to load the data into
-                    6'b000000: rxIn <= 5'b10000;
-                    6'b000001: rxIn <= 5'b01000;
-                    6'b000010: rxIn <= 5'b00100;
-                    6'b000011: rxIn <= 5'b00010;
-                    6'b000100: rxIn <= 5'b00001;
-                    default: rxIn <= 5'b00000;
+                    6'b000000: rxIn <= 6'b100000;
+                    6'b000001: rxIn <= 6'b010000;
+                    6'b000010: rxIn <= 6'b001000;
+                    6'b000011: rxIn <= 6'b000100;
+                    6'b000100: rxIn <= 6'b000010;
+                    6'b000101: rxIn <= 6'b000001;
+                    default: rxIn <= 6'b000000;
                 endcase
             end
             st10: begin // Load and store operations merge into 2nd to last state
-                done <= 1;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 1;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st11: begin
-                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 5'b00000;rxIn <= 5'b00000;pcInc <= 0;
+                done <= 0;memEN <= 0;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
         endcase
     end

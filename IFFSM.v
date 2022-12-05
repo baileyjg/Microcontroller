@@ -32,6 +32,7 @@ always @(pres_state) begin
             case(MFC)
                 1'b1: next_state <= st4;
                 1'b0: next_state <= st3;
+                default: next_state <= st3;
             endcase
         end
         st4: next_state <= st5;

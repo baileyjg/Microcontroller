@@ -9,7 +9,7 @@ module IFFSM_tb;
     wire[15:0] PCout;
 
     IFFSM fsm(clk, rst, done, MFC, PCoutEN, marIn, memEN, RW, mdReadEN, mdrOut, IRin);
-    PC pc(pcInc, rst, PCout);
+    PC pc(clk, pcInc, rst, PCout);
 
     initial begin
         $dumpfile("IFFSM.vcd");
@@ -22,11 +22,9 @@ module IFFSM_tb;
         done = 0;
 
         // Begin stimulation of values
-        rst = 1;
+        #1 rst = 1;
         #1 rst = 0;
-        done = 0;
-        #1 done = 0;
-        #60 MFC = 1;
+        #45 MFC = 1;
         #15 MFC = 0;
 
     end
