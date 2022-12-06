@@ -36,6 +36,8 @@ wire IF_MDR_out, mem_MDR_out; // MDR Out EN
 wire IF_mem_EN, mem_mem_EN; // Mem EN
 wire IF_RW, mem_RW; // Mem RW
 wire IF_active; // Active signal of IFFSM
+wire MEMFSM_addr_out_EN;
+wire[15:0] MEMFSM_addr_out;
 wire ALUFSM_ALU_in0, ALUFSM_ALU_in1, ALUiFSM_ALU_in0, ALUiFSM_ALU_in1;
 wire ALUFSM_ALU_outlatch, ALUiFSM_ALU_outlatch;
 wire ALUFSM_ALU_outEN, ALUiFSM_ALU_outEN;
@@ -62,7 +64,7 @@ ALUFSM alufsm(clk, rst, IRinstruct, ALU_done, ALU_RegX_Out, ALUFSM_ALU_in0, ALUF
 ALUFSM_ALU_outlatch, ALUFSM_ALU_outEN, ALU_RegX_In, ALU_PC_inc, IF_active);
 ALUiFSM alui(clk, rst, IRinstruct, ALUi_done, ALUi_RegX_Out, ALUiFSM_ALU_in0, ALUiFSM_ALU_in1, 
 ALUiFSM_ALU_outlatch, ALUiFSM_ALU_outEN, ALUi_RegX_In, ALUi_PC_inc, ALUi_param2out, ALUImmOut, IF_active);
-MEMFSM memfsm(clk, rst, IRinstruct, mem_done, mem_mem_EN, mem_MAR_in, MDR_WRITE_EN, mem_MDR_read, mem_MDR_out, mem_RW, mem_RegX_Out, mem_RegX_In, mem_PC_inc, MFC, IF_active);
+MEMFSM memfsm(clk, rst, IRinstruct, mem_done, mem_mem_EN, mem_MAR_in, MDR_WRITE_EN, mem_MDR_read, mem_MDR_out, mem_RW, mem_RegX_Out, mem_RegX_In, mem_PC_inc, MFC, MEMFSM_addr_out_EN, MEMFSM_addr_out, IF_active);
 MOVFSM mov(clk, rst, IRinstruct, MOV_done, MOV_RegX_Out, MOV_RegX_In, MOV_PC_inc, IF_active);
 MOViFSM movi(clk, rst, IRinstruct, MOVi_done, MOVi_RegX_In, MOVi_PC_inc, MOVi_param2out, MOVImmOut, IF_active);
 
@@ -146,6 +148,9 @@ tri_state p1tri(P1_OUT_EN, p1_data_out, bus);
 
 // Instruction Register
 dff IR(clk, rst, IR_IN, bus, IRinstruct);
+
+// MEMFSM Invalid AddressOut Tri-State
+tri_state IFDataOut(MEMFSM_addr_out_EN, MEMFSM_addr_out, bus);
 
 // ALUi Immediate Num Out Tri-state
 tri_state immOut(ALUImmOut, ALUi_param2out, bus);
