@@ -4,7 +4,6 @@
 module top_level_tb;
     reg clk, rst;
     reg[15:0] p1Data;
-    reg[2:0] opControl;
     wire[15:0] p0_data_out, bus;
 
     // Port mapping of the top_level

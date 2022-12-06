@@ -23,7 +23,7 @@ parameter st8 = 4'b1000, st9 = 4'b1001, st10 = 4'b1010;
 always @(posedge clk or posedge rst) begin
     if(rst)
         pres_state <= st0;
-    else if(opcode == 4'b0000 || opcode == 4'b0001)
+    else if(opcode == 4'b0001 || opcode == 4'b0010)
         pres_state <= next_state;
     else
         pres_state <= st0;

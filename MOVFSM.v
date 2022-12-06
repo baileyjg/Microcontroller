@@ -21,7 +21,7 @@ module MOVFSM(clk, rst, instruction, done, rxOut, rxIn, pcInc);
     always @(posedge clk or posedge rst) begin
         if(rst)
             pres_state <= st0;
-        else if(opCode == 4'b0100)
+        else if(opCode == 4'b0101)
             pres_state <= next_state;
         else
             pres_state <= st0;

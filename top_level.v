@@ -16,9 +16,11 @@
 `timescale 1ns/10ps
 
 module top_level(clk, rst, p1Data, p0_data_out, bus);
-input clk, rst, MFC;
+input clk, rst;
+wire MFC;
 input[15:0] p1Data;
-output[15:0] p0_data_out;
+output wire[15:0] p0_data_out;
+wire[15:0] p1_data_out;
 inout wire[15:0] bus;
 
 // FSM Output Signals
@@ -37,6 +39,21 @@ wire ALUFSM_ALU_in0, ALUFSM_ALU_in1, ALUiFSM_ALU_in0, ALUiFSM_ALU_in1;
 wire ALUFSM_ALU_outlatch, ALUiFSM_ALU_outlatch;
 wire ALUFSM_ALU_outEN, ALUiFSM_ALU_outEN;
 
+wire[15:0] IRinstruct;
+wire[15:0] ALUi_param2out, MOVi_param2out;
+
+wire[15:0] ALUin0_data, ALUin1_data; // ALU input registers
+wire[2:0] ALUControlOp; // ALU op control
+wire[15:0] ALU_data_out, ALU_out_latch_data;
+
+wire[15:0] PC_instruct_out; // Instruction data from the PC
+
+wire[15:0] r0_data, r1_data, r2_data, r3_data; // Gen reg temp signals
+
+wire[15:0] memAdress;
+
+wire[15:0] memDataIn, memDataOutLatch, memDataOut;
+
 // FSM Instantiations
 IFFSM IF(clk, rst, DONE, MFC, PC_OUT_EN, IF_MAR_in, IF_mem_EN, IF_RW, IF_MDR_read, IF_MDR_out, IR_IN);
 ALUFSM alufsm(clk, rst, IRinstruct, ALU_done, ALU_RegX_Out, ALUFSM_ALU_in0, ALUFSM_ALU_in1, 
@@ -47,9 +64,9 @@ MEMFSM memfsm(clk, rst, IRinstruct, mem_done, mem_mem_EN, mem_MAR_in, MDR_WRITE_
 MOVFSM mov(clk, rst, IRinstruct, MOV_done, MOV_RegX_Out, MOV_RegX_In, MOV_PC_inc);
 MOViFSM movi(clk, rst, IRinstruct, MOVi_done, MOVi_RegX_In, MOVi_PC_inc, MOVi_param2out, MOVImmOut);
 
-wire DONE, PC_INC, MEM_EN, RW, MAR_IN, MDR_READ_EN, MDR_OUT, ALU_OUT_LATCH_EN, ALU_OUT_EN, ALUIN0_EN, ALUIN1_EN;
-wire R0_OUT_EN, R1_OUT_EN, R2_OUT_EN, R3_OUT_EN, R0_IN_EN, R1_IN_EN, R2_IN_EN, R3_IN_EN;
-wire P0_OUT_EN, P1_OUT_EN, P0_IN_EN, P1_IN_EN;
+//wire DONE, PC_INC, MEM_EN, RW, MAR_IN, MDR_READ_EN, MDR_OUT, ALU_OUT_LATCH_EN, ALU_OUT_EN, ALUIN0_EN, ALUIN1_EN;
+//wire R0_OUT_EN, R1_OUT_EN, R2_OUT_EN, R3_OUT_EN, R0_IN_EN, R1_IN_EN, R2_IN_EN, R3_IN_EN;
+//wire P0_OUT_EN, P1_OUT_EN, P0_IN_EN, P1_IN_EN;
 
 // Assignments
 assign DONE = (ALU_done || ALUi_done || mem_done || MOV_done || MOVi_done);
@@ -81,27 +98,18 @@ assign P1_OUT_EN = (ALU_RegX_Out[0] || ALUi_RegX_Out[0] || mem_RegX_Out[0] || MO
 assign P1_IN_EN = (ALU_RegX_In[0] || ALUi_RegX_In[0] || mem_RegX_In[0] || MOV_RegX_In[0] || MOVi_RegX_In[0]);
 
 // Components //
-wire[15:0] IRinstruct;
-wire[15:0] ALUi_param2out, MOVi_param2out;
-
-wire[15:0] ALUin0_data, ALUin1_data; // ALU input registers
-wire[2:0] ALUControlOp; // ALU op control
-wire[15:0] ALU_data_out, ALU_out_latch_data;
-assign ALUControlOp = IRinstruct[14:12]; // Get last three bits of the opcode
 
 // ALU
-ALU alu(ALUin0_data, ALUin1_data, ALUControlOp, ALU_data_out);
+ALU alu(ALUin0_data, ALUin1_data, IRinstruct[14:12], ALU_out_latch_data);
 dff flip0(clk, rst, ALUIN0_EN, bus, ALUin0_data); // ALU input reg 1
 dff flip1(clk, rst, ALUIN1_EN, bus, ALUin1_data); // ALU input reg 2
 dff flip2(clk, rst, ALU_OUT_LATCH_EN, ALU_out_latch_data, ALU_data_out); // ALU output reg
 tri_state buffer(ALU_OUT_EN, ALU_data_out, bus); // ALU output tri-state
 
-wire[15:0] PC_instruct_out; // Instruction data from the PC
 // Program counter
 PC pc(clk, PC_INC, rst, PC_instruct_out);
 tri_state buffer2(PC_OUT_EN, PC_instruct_out, bus);
 
-wire[15:0] r0_data, r1_data, r2_data, r3_data; // Gen reg temp signals
 // General purpose registers
 dff r0(clk, rst, R0_IN_EN, bus, r0_data);
 tri_state buffer3(R0_OUT_EN, r0_data, bus);
@@ -118,17 +126,14 @@ tri_state buffer6(R3_OUT_EN, r3_data, bus);
 // Memory
 mem MEM(MFC, MEM_EN, memAdress, memDataIn, RW, memDataOutLatch);
 
-wire[15:0] memAdress;
 // MAR
 dff MAR(clk, rst, MAR_IN, bus, memAdress);
 
-wire[15:0] memDataIn, memDataOutLatch, memDataOut;
 // MDR
 dff MDRwrite(clk, rst, MDR_WRITE_EN, bus, memDataIn); // MDR write D flip-flop
 dff MDRread(clk, rst, MDR_READ_EN, memDataOutLatch, memDataOut); // MDR read D flip-flop
 tri_state MDRtri(MDR_OUT, memDataOut, bus);
 
-wire[15:0] p0_data_out, p1_data_out;
 // P0
 dff p0(clk, rst, P0_IN_EN, bus, p0_data_out);
 tri_state p0tri(P0_OUT_EN, p0_data_out, bus);

@@ -53,7 +53,7 @@ always @(pres_state) begin
             PCoutEN <= 1; MARin <= 1; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
         end
         st2: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 1; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; // DOUBLE CHECK
         end
         st3: begin
             PCoutEN <= 0; MARin <= 0; memEN <= 1; RW <= 1; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
