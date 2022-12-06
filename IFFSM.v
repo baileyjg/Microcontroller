@@ -23,7 +23,7 @@ always @(posedge clk or posedge rst or posedge done) begin
 end
 
 // Next state logic
-always @(pres_state) begin
+always @(pres_state or MFC) begin
     case(pres_state)
         st0: next_state <= st1;
         st1: next_state <= st2;

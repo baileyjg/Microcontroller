@@ -51,11 +51,11 @@ end
 always @(pres_state) begin
     case(pres_state)
         st0: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 0;
             param2Out <= 16'b0000000000000000;
         end
         st1: begin
-            done <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 1;
+            done <= 0;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 1;ALUImmOut <= 0;
             case(param1) // Figure out which gen reg EN to assert
                 6'b000000: rxOut <= 6'b100000;
                 6'b000001: rxOut <= 6'b010000;
@@ -67,7 +67,7 @@ always @(pres_state) begin
             endcase
         end
         st2: begin
-            done <= 0;ALUin0 <= 1;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 0;ALUin0 <= 1;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 0;
             case(param1) // Figure out which gen reg EN to assert
                 6'b000000: rxOut <= 6'b100000;
                 6'b000001: rxOut <= 6'b010000;
@@ -79,20 +79,20 @@ always @(pres_state) begin
             endcase
         end
         st3: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 1;
             param2Out <= {10'b0000000000, param2}; // Pass the immediate num to the tri-state
         end
         st4: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 1;
+        end
+        st5: begin
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 1;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 0;
         end
         st6: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 1;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
-        end
-        st6: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 0;
         end
         st8: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;pcInc <= 0;
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 1;pcInc <= 0;ALUImmOut <= 0;
             case(param1) // Figure out which gen reg EN to assert
                 6'b000000: rxIn <= 6'b100000;
                 6'b000001: rxIn <= 6'b010000;
@@ -104,10 +104,10 @@ always @(pres_state) begin
             endcase
         end
         st9: begin
-            done <= 1;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 1;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 0;
         end
         st10: begin
-            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
+            done <= 0;rxOut <= 6'b000000;ALUin0 <= 0;ALUin1 <= 0;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;ALUImmOut <= 0;
         end
     endcase
 end

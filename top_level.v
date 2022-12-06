@@ -41,6 +41,7 @@ wire ALUFSM_ALU_outEN, ALUiFSM_ALU_outEN;
 
 wire[15:0] IRinstruct;
 wire[15:0] ALUi_param2out, MOVi_param2out;
+wire ALUImmOut, MOVImmOut;
 
 wire[15:0] ALUin0_data, ALUin1_data; // ALU input registers
 wire[2:0] ALUControlOp; // ALU op control

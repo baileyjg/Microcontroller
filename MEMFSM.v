@@ -114,7 +114,7 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
                     default: rxOut <= 6'b000000;
                 endcase
             end
-            st6: begin
+            st5: begin
                 done <= 0;memEN <= 1;marIn <= 0;mdrWriteEN <= 0;mdrReadEN <= 0;mdrOut <= 0;RW <= 0;rxOut <= 6'b000000;rxIn <= 6'b000000;pcInc <= 0;
             end
             st6: begin // Begin load operation

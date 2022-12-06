@@ -23,7 +23,7 @@ parameter st8 = 4'b1000, st9 = 4'b1001, st10 = 4'b1010;
 always @(posedge clk or posedge rst) begin
     if(rst)
         pres_state <= st0;
-    else if(opcode == 4'b1000 || opcode == 4'b1001 || opcode == 4'b1010 || opcode == 4'b1011 || opcode == 4'b1100 || opcode == 4'b1101 || opcode == 4'b1110)
+    else if(opcode == 4'b1001 || opcode == 4'b1010 || opcode == 4'b1011 || opcode == 4'b1100 || opcode == 4'b1101 || opcode == 4'b1110 || opcode == 4'b1111)
         pres_state <= next_state;
     else
         pres_state <= st0;
@@ -92,7 +92,7 @@ always @(pres_state) begin
                 default: rxOut <= 6'b000000;
             endcase
         end
-        st6: begin
+        st5: begin
             done <= 0;ALUin0 <= 0;ALUin1 <= 1;ALUoutlatch <= 0;ALUoutEN <= 0;rxIn <= 6'b000000;pcInc <= 0;
             case(param2) // Figure out which gen reg EN to assert
                 6'b000000: rxOut <= 6'b100000;
