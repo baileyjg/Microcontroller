@@ -4,8 +4,8 @@
 
 `timescale 1ns/10ps
 
-module ALUFSM(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc);
-input clk, rst;
+module ALUFSM(clk, rst, instruction, done, rxOut, ALUin0, ALUin1, ALUoutlatch, ALUoutEN, rxIn, pcInc, IF_active);
+input clk, rst, IF_active;
 input[15:0] instruction; // 16-bit data
 wire[3:0] opcode = instruction[15:12];
 wire[5:0] param1 = instruction[11:6];
@@ -22,6 +22,8 @@ parameter st8 = 4'b1000, st9 = 4'b1001, st10 = 4'b1010;
 // State register
 always @(posedge clk or posedge rst) begin
     if(rst)
+        pres_state <= st0;
+    else if(IF_active)
         pres_state <= st0;
     else if(opcode == 4'b1001 || opcode == 4'b1010 || opcode == 4'b1011 || opcode == 4'b1100 || opcode == 4'b1101 || opcode == 4'b1110 || opcode == 4'b1111)
         pres_state <= next_state;

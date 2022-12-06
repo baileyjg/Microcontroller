@@ -2,11 +2,11 @@
 
 `timescale 1ns/10ps
 
-module IFFSM(clk, rst, done, MFC, PCoutEN, MARin, memEN, RW, MDRreadEN, MDRout, IRin);
+module IFFSM(clk, rst, done, MFC, PCoutEN, MARin, memEN, RW, MDRreadEN, MDRout, IRin, active);
 input clk; // Clock
 input rst, done; // FSM kickstart signals
 input MFC; // Memory function complete
-output reg PCoutEN, MARin, memEN, RW, MDRreadEN, MDRout, IRin; // FSM output signals
+output reg PCoutEN, MARin, memEN, RW, MDRreadEN, MDRout, IRin, active; // FSM output signals
 
 // States
 reg[2:0] pres_state, next_state;
@@ -47,31 +47,31 @@ end
 always @(pres_state) begin
     case(pres_state)
         st0: begin
-            PCoutEN <= 1; MARin <= 0; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 1; MARin <= 0; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; active <= 1;
         end
         st1: begin
-            PCoutEN <= 1; MARin <= 1; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 1; MARin <= 1; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; active <= 1;
         end
         st2: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; // DOUBLE CHECK
+            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; active <= 1;
         end
         st3: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 1; RW <= 1; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 0; MARin <= 0; memEN <= 1; RW <= 1; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; active <= 1;
         end
         st4: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 1; RW <= 1; MDRreadEN <= 1; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 0; MARin <= 0; memEN <= 1; RW <= 1; MDRreadEN <= 1; MDRout <= 0; IRin <= 0; active <= 1;
         end
         st5: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 1; IRin <= 0;
+            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 1; IRin <= 0; active <= 1;
         end
         st6: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 1; IRin <= 1;
+            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 1; MDRreadEN <= 0; MDRout <= 1; IRin <= 1; active <= 1;
         end
         st7: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; active <= 0;
         end
         default: begin
-            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0;
+            PCoutEN <= 0; MARin <= 0; memEN <= 0; RW <= 0; MDRreadEN <= 0; MDRout <= 0; IRin <= 0; active <= 0;
         end
     endcase
 end

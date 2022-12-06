@@ -4,8 +4,8 @@
 
 `timescale 1ns/10ps
 
-module MOVFSM(clk, rst, instruction, done, rxOut, rxIn, pcInc);
-    input clk, rst;
+module MOVFSM(clk, rst, instruction, done, rxOut, rxIn, pcInc, IF_active);
+    input clk, rst, IF_active;
     input[15:0] instruction;
     wire[3:0] opCode = instruction[15:12];
     wire[5:0] param1 = instruction[11:6];
@@ -20,6 +20,8 @@ module MOVFSM(clk, rst, instruction, done, rxOut, rxIn, pcInc);
     // State register
     always @(posedge clk or posedge rst) begin
         if(rst)
+            pres_state <= st0;
+        else if(IF_active)
             pres_state <= st0;
         else if(opCode == 4'b0101)
             pres_state <= next_state;

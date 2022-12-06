@@ -4,8 +4,8 @@
 
 `timescale 1ns/10ps
 
-module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, mdrOut, RW, rxOut, rxIn, pcInc, MFC);
-    input clk, rst, MFC;
+module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, mdrOut, RW, rxOut, rxIn, pcInc, MFC, IF_active);
+    input clk, rst, MFC, IF_active;
     input[15:0] instruction;
     wire[3:0] opCode = instruction[15:12];
     wire[5:0] param1 = instruction[11:6];
@@ -22,6 +22,8 @@ module MEMFSM(clk, rst, instruction, done, memEN, marIn, mdrWriteEN, mdrReadEN, 
     // State register
     always @(posedge clk or posedge rst) begin
         if(rst)
+            pres_state <= st0;
+        else if(IF_active)
             pres_state <= st0;
         else if(pres_state == st2 && opCode == 4'b0011) // Branch to st6 for load operation
             pres_state <= st6;

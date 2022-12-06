@@ -6,7 +6,7 @@ module mem(MFC, en, addr, in, rw, out);
     output reg[15:0] out;
     output reg MFC;
 
-    reg memorycell;
+    reg[15:0] memorycell;
 
     always @(posedge en) begin
         if(rw==1)
